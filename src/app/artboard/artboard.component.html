@@ -1,0 +1,61 @@
+<svg [attr.width]="width" [attr.height]="height" (mousedown)="onMouseDown($event)" (mouseup)="onMouseUp($event)" (mouseleave)="onMouseLeave($event)">
+    <rect
+        [attr.width]="width"
+        [attr.height]="height"
+        [attr.rx]="cornerRadius"
+        [attr.ry]="cornerRadius"
+        [attr.fill]="emptyColor"
+    ></rect>
+    <ng-container *ngFor="let row of cells">
+        <ng-container *ngFor="let cell of row">
+            <rect
+            [attr.x]="cell.column * cellWidth"
+            [attr.y]="cell.row * cellHeight"
+            [attr.width]="cellWidth"
+            [attr.height]="cellHeight"
+            [attr.rx]="cornerRadius"
+            [attr.ry]="cornerRadius"
+            [attr.fill]="cell.filled ? fillColor : emptyColor"
+            (mouseover)="onMouseOver(cell)"
+            [attr.stroke]="cell.filled ? '#422a17' : 'none'"
+          ></rect>
+        </ng-container>
+    </ng-container>
+    <ng-container *ngFor="let row of rightFillerCells">
+        <ng-container *ngFor="let cell of row">
+          <rect
+            [attr.x]="columns * cellWidth + cell.column * cellHeight"
+            [attr.y]="cell.row * cellWidth"
+            [attr.width]="cellHeight"
+            [attr.height]="cellWidth"
+            [attr.rx]="cornerRadius"
+            [attr.ry]="cornerRadius"
+            [attr.fill]="cell.filled ? fillColor : emptyColor"
+            (mouseover)="onMouseOver(cell)"
+            [attr.stroke]="cell.filled ? '#422a17' : 'none'"
+          ></rect>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngFor="let row of bottomFillerCells">
+        <ng-container *ngFor="let cell of row">
+          <rect
+            [attr.x]="cell.column * cellHeight"
+            [attr.y]="rows * cellHeight + cell.row * cellWidth"
+            [attr.width]="cellHeight"
+            [attr.height]="cellWidth"
+            [attr.rx]="cornerRadius"
+            [attr.ry]="cornerRadius"
+            [attr.fill]="cell.filled ? fillColor : emptyColor"
+            (mouseover)="onMouseOver(cell)"
+            [attr.stroke]="cell.filled ? '#422a17' : 'none'"
+          ></rect>
+        </ng-container>
+      </ng-container>
+</svg>
+<div>
+    <p class="warning" *ngIf="!isDimensionValid()">Warning! Degenerate Tot dimensions detected. Tot Stats may not reflect reality!</p>
+    <h1>Tot Stats</h1>
+    <p>TCI (Tot Coverage Index): {{ fillPercentage | number: '1.0-0' }}%</p>
+    <p>Tots Required: {{totalFilledCells}}</p>
+    <p>Bags of Tots Required (Assumes 32oz bag): {{bagsNeeded}}</p>
+</div>
